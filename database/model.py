@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Index, Numeric, BigInteger, ForeignKey, func, DATETIME, TIMESTAMP, String, Column, text
-from sqlalchemy.dialects.mysql import TINYINT,LONGTEXT,ENUM, VARCHAR, BIGINT
+from sqlalchemy import ForeignKey, TIMESTAMP, Integer, String, Column, text
+from sqlalchemy.dialects.mysql import BIGINT
 
 
 Base = declarative_base()
@@ -15,20 +15,22 @@ class Admin(Base):
 
 
 
-class SmsContent(Base):
-    __tablename__ = 'campaign_data'
+class Campaign(Base):
+    __tablename__ = 'campaign'
 
     id = Column(BIGINT, primary_key=True)
     name = Column(String(50), nullable=False)
     originator = Column(String(50), nullable=False)
     content = Column(String(255), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), server_default=text('now()'))
+    status = Column(Integer)
+    log = Column(String(500), nullable=True)
 
 
 
-class SmsDetails(Base):
-    __tablename__ = 'sms_details'
+class Recipient(Base):
+    __tablename__ = 'recipient'
 
     id = Column(BIGINT, primary_key=True)
-    campaign_id = Column(ForeignKey('campaign_data.id', ondelete=u'CASCADE'), index=True)
+    campaign_id = Column(ForeignKey('campaign.id', ondelete=u'CASCADE'), index=True)
     send_to = Column(String(15), nullable=False)

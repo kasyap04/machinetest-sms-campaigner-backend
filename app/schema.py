@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class CampaignerSchema(BaseModel):
-    name : str
+    campaignName : str
     originator : str
-    recipients : list[str]
+    recipients : list
     content : str

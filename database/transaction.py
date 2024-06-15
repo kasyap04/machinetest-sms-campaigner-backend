@@ -3,8 +3,8 @@ from sqlalchemy import exc
 from functools import wraps
 from retry import retry
 
-
 from database.db import BaseSession
+from app.exception import ValidationError
 
 
 @contextmanager
@@ -16,6 +16,7 @@ def transaction_manager():
         db.commit()
     except Exception as e:
         db.rollback()
+        raise e
     finally:
         db.close() 
 
@@ -36,8 +37,8 @@ def transaction(func):
 
         except (exc.IntegrityError) as e:  # Deadlock
             raise e
-
         except exc.SQLAlchemyError as e:
             raise
+
         
     return decorator
