@@ -31,5 +31,6 @@ async def createCampaigner(items : CampaignerSchema):
     except Exception as e:
         print(e.args)
         return {
-            'status' : False
+            'status' : False,
+            'msg': "Error occured"
         }
