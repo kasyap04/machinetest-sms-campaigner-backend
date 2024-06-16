@@ -66,7 +66,8 @@ class AuthController:
         return passworc_check
 
 
-
+    def delet_cookie(self, response: Response):
+        response.delete_cookie(Config.AUTH_SESSION_KEY)
 
 
     def common_validation(self, request: Request):
@@ -79,4 +80,5 @@ class AuthController:
             return False
         
         check_login = self.login(**verify, setcookie=False)
+
         return check_login

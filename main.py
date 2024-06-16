@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware import Middleware
-from fastapi.responses import JSONResponse
 
 from controller.auth import AuthController
 from app.api import router
+from app.config import Config
 
 
 app = FastAPI(
@@ -24,11 +24,10 @@ app = FastAPI(
 async def middle(request: Request, call_next):
     url = request.url.path
 
-    if url != "/login":
+    if url not in ["/login", "/logout"]:
         auth    = AuthController()
-        verify  = auth.common_validation(request)
-        if not verify:
-            return JSONResponse(content={'status': False})
+        request.state.verifyToken = auth.common_validation(request)
+        
 
     response = await call_next(request)
     return response

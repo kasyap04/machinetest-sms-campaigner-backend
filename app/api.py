@@ -4,6 +4,7 @@ from controller.campaign import CampaignController
 from controller.auth import AuthController
 from app.schema import CampaignerSchema, AuthSchema
 from app.exception import ValidationError
+from app.config import Config
 
 
 router = APIRouter()
@@ -11,12 +12,14 @@ router = APIRouter()
 
 
 @router.post("/auth")
-async def authenticate():
+async def authenticate(response: Response, request: Request):
     """
-    Authentication is completed in middleware.
-    This api will work only if the if its authenticated
+    Authentication is completed in middleware and the result pass through state
     """
-    return {'status': True}
+    if not request.state.verifyToken:
+        response.delete_cookie(Config.AUTH_SESSION_KEY)
+
+    return {'status': request.state.verifyToken}
 
 
 
@@ -47,6 +50,11 @@ async def authenticate(response: Response, payload: AuthSchema):
         }
 
 
+@router.post("/logout")
+def logout(response: Response):
+    response.delete_cookie(Config.AUTH_SESSION_KEY)
+
+    return {'status': True}
 
 
 

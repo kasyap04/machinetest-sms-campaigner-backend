@@ -21,7 +21,7 @@ class Campaign(Base):
     id = Column(BIGINT, primary_key=True)
     name = Column(String(50), nullable=False)
     originator = Column(String(50), nullable=False)
-    content = Column(String(255), nullable=False)
+    content = Column(String(500), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), server_default=text('now()'))
     status = Column(Integer)
     log = Column(String(500), nullable=True)
