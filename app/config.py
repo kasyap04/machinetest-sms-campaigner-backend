@@ -6,11 +6,13 @@ load_dotenv()
 
 class Config:
     DEBUG : bool = os.getenv('DEBUG', 'TRUE') == 'TRUE'
-    FRONTEND_URL : str = os.getenv('FRONTEND_URL')
 
     SMS_API : str       = os.getenv('SMS_API')
     TOKEN : str         = os.getenv('TOKEN')
     REPORT_URL : str    = os.getenv('REPORT_URL')
+
+    SECRET_KEY : str    = os.getenv('SECRET_KEY')
+    AUTH_SESSION_KEY : str = "auth_key"
 
 
 class DatabaseConfig:
