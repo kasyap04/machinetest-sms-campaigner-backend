@@ -1,11 +1,12 @@
 import os
 from dotenv import load_dotenv
+from pytz import timezone
 
 load_dotenv()
 
 
 class Config:
-    DEBUG : bool = os.getenv('DEBUG', 'TRUE') == 'TRUE'
+    TIMEZONE = timezone(os.getenv('TIMEZONE'))
 
     SMS_API : str       = os.getenv('SMS_API')
     TOKEN : str         = os.getenv('TOKEN')

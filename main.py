@@ -4,7 +4,7 @@ from fastapi.middleware import Middleware
 
 from controller.auth import AuthController
 from app.api import router
-from app.config import Config
+from utils.logger import logger
 
 
 app = FastAPI(
@@ -23,6 +23,7 @@ app = FastAPI(
 @app.middleware("http")
 async def middle(request: Request, call_next):
     url = request.url.path
+    logger.info("TO : %s" % url)
 
     if url not in ["/login", "/logout"]:
         auth    = AuthController()
@@ -39,4 +40,7 @@ app.include_router(router)
 
 @app.get("/")
 def root():
-    return "Welcome to SMS Campaigner"
+    return {
+        'status': True,
+        'msg': "Welcome to SMS Campaigner"
+    }

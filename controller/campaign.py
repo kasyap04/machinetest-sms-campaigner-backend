@@ -5,6 +5,7 @@ from datetime import datetime
 
 from app.config import Config
 from app.exception import ValidationError
+from utils.logger import logger
 from database.transaction import transaction
 from database.model import Admin, Campaign, Recipient
 
@@ -46,10 +47,11 @@ class CampaignController:
         }
 
         try:
-            requests.request("POST", Config.SMS_API, headers=headers, data=body)
-            
-            return 1, None
+            res = requests.request("POST", Config.SMS_API, headers=headers, data=body)
+            logger.info("API : %s   CODE: %s  RES: %s" % (Config.SMS_API, res.status_code, res.content))
+            return res.status_code, res.content.decode('utf-8')
         except Exception as e:
+            logger.exception(e)
             return 0, str(e.args)
 
 
@@ -88,3 +90,6 @@ class CampaignController:
             )
         
         db.bulk_save_objects(recipients_list)
+
+        if status != 200:
+            raise ValidationError("Error sending SMS")

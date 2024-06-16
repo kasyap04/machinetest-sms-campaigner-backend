@@ -5,6 +5,7 @@ from controller.auth import AuthController
 from app.schema import CampaignerSchema, AuthSchema
 from app.exception import ValidationError
 from app.config import Config
+from utils.logger import logger
 
 
 router = APIRouter()
@@ -38,12 +39,13 @@ async def authenticate(response: Response, payload: AuthSchema):
             'msg' : 'loged in'
         }
     except ValidationError as e:
+        logger.exception(e)
         return {
             'status' : False,
             'msg' : e.args[0]
         }
     except Exception as e:
-        print(e.args)
+        logger.exception(e)
         return {
             'status' : False,
             'msg': "Error occured"
@@ -51,8 +53,9 @@ async def authenticate(response: Response, payload: AuthSchema):
 
 
 @router.post("/logout")
-def logout(response: Response):
+async def logout(response: Response):
     response.delete_cookie(Config.AUTH_SESSION_KEY)
+    logger.info("Session logged out")
 
     return {'status': True}
 
@@ -69,12 +72,13 @@ async def createCampaigner(items : CampaignerSchema):
             'msg' : 'SMS send successfully'
         }
     except ValidationError as e:
+        logger.exception(e)
         return {
             'status' : False,
             'msg' : e.args[0]
         }
     except Exception as e:
-        print(e.args)
+        logger.exception(e)
         return {
             'status' : False,
             'msg': "Error occured"
