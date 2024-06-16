@@ -24,7 +24,7 @@ class Campaign(Base):
     content = Column(String(500), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), server_default=text('now()'))
     status = Column(Integer)
-    log = Column(String(500), nullable=True)
+    log = Column(String(800), nullable=True)
 
 
 

@@ -41,3 +41,9 @@ Once the dependencies are installed, you can start the FastAPI application:
 
 ```bash
 uvicorn main:app --host localhost --port 8000
+```
+
+## Unit Test
+```bash
+pytest
+```

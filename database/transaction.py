@@ -5,6 +5,7 @@ from retry import retry
 
 from database.db import BaseSession
 from app.exception import ValidationError
+from utils.logger import logger
 
 
 @contextmanager
@@ -15,6 +16,7 @@ def transaction_manager():
 
         db.commit()
     except Exception as e:
+        logger.error(f"Transaction rollback due to : {e}")
         db.rollback()
         raise e
     finally:
