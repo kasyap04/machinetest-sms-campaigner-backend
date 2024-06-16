@@ -5,11 +5,13 @@ from fastapi import Response, Request
 from sqlalchemy.orm import Session
 
 from app.config import Config
-from app.exception import ValidationError
 from database.transaction import transaction
 from database.model import Admin
 
 
+"""
+SECRET_KEY is random string used to serialize username and password, to store serialzed data in cookie
+"""
 serializer = URLSafeTimedSerializer(Config.SECRET_KEY)
 
 
@@ -66,11 +68,11 @@ class AuthController:
         return passworc_check
 
 
-    def delet_cookie(self, response: Response):
-        response.delete_cookie(Config.AUTH_SESSION_KEY)
-
 
     def common_validation(self, request: Request):
+        """
+        Used to authenticate in middleware
+        """
         token = request.cookies.get(Config.AUTH_SESSION_KEY)
         if not token:
             return False
