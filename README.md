@@ -31,9 +31,8 @@
     ```
 
 ## Configuration
-1. create .env file from .env.example and fill the constants
+1.  create `.env` file from `.env.example` and fill the constants
 2.  (Optional) Might need to be change frontend url in main.py to avoid CORS issue
-
 
 ## Running the App
 
@@ -42,6 +41,30 @@ Once the dependencies are installed, you can start the FastAPI application:
 ```bash
 uvicorn main:app --host localhost --port 8000
 ```
+
+### API Endpoints
+
+###### `/create-admin`
+
+This endpoint accepts a POST request with the following JSON body:
+
+- `username`: The username for the new admin account (string).
+- `password`: The password for the new admin account (string).
+
+**Example Request:**
+
+```bash
+curl -X POST "http://[HOST]:[PORT]/create-admin" -H "Content-Type: application/json" -d '{"username": "admin", "password": "securepassword"}'
+```
+
+Result:
+```bash
+{
+  "status": True,
+  "msg": "Admin created"
+}
+```
+
 
 ## Unit Test
 ```bash

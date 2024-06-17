@@ -24,6 +24,8 @@ async def authenticate(response: Response, request: Request):
 
 
 
+
+
 @router.post("/login")
 async def authenticate(response: Response, payload: AuthSchema):
     try:
@@ -70,6 +72,33 @@ async def createCampaigner(items : CampaignerSchema):
         return {
             'status' : True,
             'msg' : 'SMS send successfully'
+        }
+    except ValidationError as e:
+        logger.exception(e)
+        return {
+            'status' : False,
+            'msg' : e.args[0]
+        }
+    except Exception as e:
+        logger.exception(e)
+        return {
+            'status' : False,
+            'msg': "Error occured"
+        }
+
+
+
+
+
+@router.post("/create-admin")
+def create_admin(admin: AuthSchema):
+    try:
+        auth = AuthController()
+        res = auth.set_admin(admin)
+
+        return {
+            'status' : True,
+            'msg' : res
         }
     except ValidationError as e:
         logger.exception(e)

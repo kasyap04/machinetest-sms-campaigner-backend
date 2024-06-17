@@ -3,6 +3,7 @@ import bcrypt
 from itsdangerous import URLSafeTimedSerializer
 from fastapi import Response, Request
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 from app.config import Config
 from database.transaction import transaction
@@ -23,6 +24,23 @@ class AuthController:
     def hash_password(self, password):
         salt = bcrypt.gensalt() 
         return bcrypt.hashpw(password.encode('utf-8') , salt).decode()
+
+
+    @transaction
+    def set_admin(self, db: Session, payload):
+        is_exists = db.query(func.count(Admin.id)).scalar()
+        if is_exists:
+            return "Admin already exist"
+        
+        admin = Admin(
+            username = payload.username,
+            password = self.hash_password(payload.password)
+        )
+
+        db.add(admin)
+        return "Admin created"
+
+
 
     def check_password(self, hashed_pwd, password) -> bool:
         return bcrypt.checkpw(password.encode('utf-8'), hashed_pwd.encode('utf-8')) 
